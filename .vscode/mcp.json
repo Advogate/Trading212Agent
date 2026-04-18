@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "trading212": {
+      "type": "stdio",
+      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": [
+        "-m",
+        "trading212_mcp.server"
+      ],
+      "envFile": "${workspaceFolder}/.env"
+    }
+  }
+}
