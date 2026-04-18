@@ -9,3 +9,4 @@ htmlcov/
 *.pyo
 *.pyd
 .vscode/settings.json
+docs/
