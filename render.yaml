@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: trading212-mcp
+    runtime: python
+    plan: free
+    buildCommand: pip install -e .
+    startCommand: python -m trading212_mcp.server --transport streamable-http --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: T212_TRANSPORT
+        value: streamable-http
+      - key: T212_STREAMABLE_HTTP_PATH
+        value: /mcp
+      - key: T212_ENFORCE_HTTP_BEARER_AUTH
+        value: "true"
+      - key: T212_RATE_LIMIT_REQUESTS
+        value: "30"
+      - key: T212_RATE_LIMIT_WINDOW_SECONDS
+        value: "60"
+      - key: T212_BASE_URL
+        value: https://live.trading212.com/api/v0
+      - key: T212_API_KEY
+        sync: false
+      - key: T212_API_SECRET
+        sync: false
+      - key: T212_AUTH_TOKEN
+        sync: false

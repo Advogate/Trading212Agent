@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Trading212 MCP (HTTP)",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"options": {
+				"env": {
+					"T212_AUTH_TOKEN": "dev-token"
+				}
+			},
+			"args": [
+				"-m",
+				"trading212_mcp.server",
+				"--transport",
+				"streamable-http"
+			],
+			"isBackground": true,
+			"group": "build"
+		}
+	]
+}

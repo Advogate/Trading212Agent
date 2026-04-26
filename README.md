@@ -31,10 +31,24 @@ Populate `.env` using the official Trading 212 documentation, then run:
 trading212-mcp
 ```
 
+By default, the server now starts over Streamable HTTP at `http://127.0.0.1:8000/mcp`.
+You can override the transport and bind settings with `T212_TRANSPORT`, `T212_HOST`,
+`T212_PORT`, and `T212_STREAMABLE_HTTP_PATH`, or with CLI flags such as
+`--transport stdio`.
+
+When running over Streamable HTTP, bearer-token auth is enforced by default.
+Set `T212_AUTH_TOKEN` and send `Authorization: Bearer <token>` on requests to the
+MCP endpoint. The public `/health` route stays open for deployment health checks.
+
+Basic in-memory rate limiting is also enabled by default for the MCP endpoint:
+- `T212_RATE_LIMIT_REQUESTS=30`
+- `T212_RATE_LIMIT_WINDOW_SECONDS=60`
+
 ## VS Code MCP Host Config
 This workspace includes a VS Code MCP host config at `.vscode/mcp.json`.
 
-It starts the server with the workspace virtual environment and loads credentials from `.env`:
+It starts the server with the workspace virtual environment, forces `stdio` for the
+local MCP host, and loads credentials from `.env`:
 
 ```json
 {
@@ -42,7 +56,7 @@ It starts the server with the workspace virtual environment and loads credential
 		"trading212": {
 			"type": "stdio",
 			"command": "${workspaceFolder}/.venv/Scripts/python.exe",
-			"args": ["-m", "trading212_mcp.server"],
+			"args": ["-m", "trading212_mcp.server", "--transport", "stdio"],
 			"envFile": "${workspaceFolder}/.env"
 		}
 	}
@@ -62,10 +76,13 @@ See `.env.example` for the required values.
 - Rotate any API key immediately if you suspect it has been exposed outside your machine.
 - `.vscode/mcp.json` is safe to commit because it references `${workspaceFolder}` and reads secrets from `.env`.
 - This repo is designed around read-only endpoints only, which makes it safer to publish and easier to reason about.
+- Hosted HTTP deployments should set a strong `T212_AUTH_TOKEN` and should not rely on the default dev task token.
 
 ## Notes
 - This scaffold is read-only by design.
 - Trading actions are intentionally excluded from v1.
+- Default transport: Streamable HTTP at `http://127.0.0.1:8000/mcp`
+- Health endpoint: `http://127.0.0.1:8000/health`
 - Demo base URL: `https://demo.trading212.com/api/v0`
 - Live base URL: `https://live.trading212.com/api/v0`
 - Historical list endpoints use cursor-based pagination with `limit` up to `50` and `nextPagePath` in the response.

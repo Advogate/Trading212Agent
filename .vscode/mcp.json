@@ -5,7 +5,9 @@
       "command": "${workspaceFolder}/.venv/Scripts/python.exe",
       "args": [
         "-m",
-        "trading212_mcp.server"
+        "trading212_mcp.server",
+        "--transport",
+        "stdio"
       ],
       "envFile": "${workspaceFolder}/.env"
     }
